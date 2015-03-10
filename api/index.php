@@ -17,7 +17,7 @@ $app->post('/trip', function () use ($tripApi) {
 
 	$trip = json_decode($app->request()->getBody());
 
-	echo $tripApi->add($trip->boat, $trip->rower, $trip->distance, $trip->description);
+	$tripApi->add($trip->boat, $trip->rower, $trip->distance, $trip->description);
 });
 
 
@@ -32,7 +32,7 @@ $app->get('/profile/:rower', function ($rower) use ($tripApi) {
 
 // Delete a trip
 $app->delete('/trip/:id', function ($id) use ($tripApi) {
-    echo $tripApi->delete($id);
+    $tripApi->delete($id);
 });
 
 
