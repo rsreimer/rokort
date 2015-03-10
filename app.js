@@ -27,12 +27,9 @@ app.service('Trips', function($http, Settings) {
 });
 
 app.controller('TripsController', function($scope, Settings, Trips) {
-    $scope.loading = true;
-
     Trips.getAll()
         .then(function(trips) {
             $scope.trips = trips;
-            $scope.loading = false;
         })
 
     $scope.descriptions = Settings.descriptions;
@@ -45,7 +42,6 @@ app.controller('TripsController', function($scope, Settings, Trips) {
         distance: Settings.distance
     }
 
-    $scope.adding = false;
     $scope.addTrip = function (trip) {
         $scope.adding = true;
 
