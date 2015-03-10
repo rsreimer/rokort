@@ -39,17 +39,7 @@ class RokortApi {
 		curl_setopt($handle, CURLOPT_URL, $this->host . $url);
 		curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($handle, CURLOPT_HTTPHEADER, array(
-			'Host: rokort.dk',
-			'Connection: keep-alive',
-			'Pragma: no-cache',
-			'Cache-Control: no-cache',
-			'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-			'Origin: http://rokort.dk',
-			'User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36',
-			'Content-Type: application/x-www-form-urlencoded',
-			'Accept-Encoding: deflate',
-			'Accept-Language: en-US,en;q=0.8,da;q=0.6,de;q=0.4',
-			'Cookie: _siteid=14; ' . $this->session_cookie
+			'Cookie: ' . $this->session_cookie
 		));
 
 		// Set extra options
