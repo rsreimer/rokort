@@ -47,13 +47,11 @@ class TripApi {
 
 	public function delete($id) {
 		$id = urlencode($id);
-
-		$start = urlencode(date('d-m-Y H:i', strtotime('-1 hour -30 minutes', strtotime('now'))));
-		$end = urlencode(date('d-m-Y H:i'));
+		$start = urlencode(date('d-m-Y H:i'));
 
 		return $this->rokortApi->post(
 			"/workshop/row_update.php",
-			"action=delete&StartDateTime=$start&EndDateTime=$end&ID=$id"
+			"action=delete&StartDateTime=$start&ID=$id"
 		);
 	}
 
