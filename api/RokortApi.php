@@ -15,16 +15,11 @@ class RokortApi {
 	}
 
 	/* Private */
-	private function login($username, $password) {
-		$username = urlencode($username);
-		$password = urlencode($password);	
-
-		$url = '/';
-		$postfields = "action=login&siteid=14&user_name=$username&password=$password&save_login=1";
-
+	private function login($siteid, $guid) {
+		$url = "/workshop/workshop.php?siteid=$siteid&guid=$guid";
+		
 		$response = $this->request($url, array(
-			CURLOPT_HEADER => 1,
-			CURLOPT_POSTFIELDS => $postfields
+			CURLOPT_HEADER => 1
 		));
 
 		// Grap session cookie from HTTP response header
