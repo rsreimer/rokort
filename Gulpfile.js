@@ -6,7 +6,7 @@ var browserSync = require('browser-sync');
 
 // VARIABLES ======================================================
 var moduleName = 'rokort';
-var isDist = $.util.env.type === 'dist';
+
 var outputFolder = 'build';
 
 var globs = {
@@ -39,17 +39,21 @@ var libs = {
 };
 
 var injectPaths = [
-  destinations.libs + '/vendor.js',
-  destinations.libs + '/vendor.css',
+  destinations.libs + '/vendor.min.js',
+  destinations.libs + '/vendor.min.css',
   destinations.js + "/**/*.js",
   destinations.js + "/templates.js",
   destinations.css + "/**/*.css"
 ];
 
+
 var tsProject = $.typescript.createProject({
   declarationFiles: true,
   noExternalResolve: true
 });
+
+var isProduction = process.argv[3] === '--prod';
+
 
 // TASKS ===========================================================
 
@@ -57,7 +61,7 @@ gulp.task('sass', function () {
   return gulp.src(globs.sass)
     .pipe($.sass({style: 'compressed', errLogToConsole: true}))
     .pipe($.autoprefixer())  // defauls to > 1%, last 2 versions, Firefox ESR, Opera 12.1
-    .pipe(isDist ? $.concat('app.css') : $.util.noop())
+    .pipe(isProduction ? $.concat('app.css') : $.util.noop())
     .pipe(gulp.dest(destinations.css))
     .pipe(browserSync.reload({stream: true}));
 });
@@ -73,9 +77,9 @@ gulp.task('ts-compile', function () {
     .pipe($.typescript(tsProject));
 
   return tsResult.js
-    .pipe(isDist ? $.concat('app.js') : $.util.noop())
+    .pipe(isProduction ? $.concat('app.js') : $.util.noop())
     .pipe($.ngAnnotate({gulpWarnings: false}))
-    .pipe(isDist ? $.uglify() : $.util.noop())
+    .pipe(isProduction ? $.uglify() : $.util.noop())
     .pipe($.wrap('(function(){<%= contents %>}());'))
     .pipe(gulp.dest(destinations.js))
     .pipe(browserSync.reload({stream: true}));
@@ -90,7 +94,7 @@ gulp.task('templates', function () {
     }))
     .pipe($.ngHtml2js({moduleName: moduleName, declareModule: false}))
     .pipe($.concat('templates.js'))
-    .pipe(isDist ? $.uglify() : $.util.noop())
+    .pipe(isProduction ? $.uglify() : $.util.noop())
     .pipe(gulp.dest(destinations.js))
     .pipe(browserSync.reload({stream: true}));
 });
@@ -113,13 +117,13 @@ gulp.task('browser-sync', function () {
 
 gulp.task('copy-vendor-js', function () {
   return gulp.src(libs.js)
-    .pipe($.concat('vendor.js'))
+    .pipe($.concat('vendor.min.js'))
     .pipe(gulp.dest(destinations.libs))
 });
 
 gulp.task('copy-vendor-css', function () {
   return gulp.src(libs.css)
-    .pipe($.concat('vendor.css'))
+    .pipe($.concat('vendor.min.css'))
     .pipe(gulp.dest(destinations.libs))
 });
 
