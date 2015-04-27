@@ -1,2 +1,15 @@
-.idea
 api/authinfo.php
+
+build/
+
+# You should commit npm/bower packages in your projects
+node_modules/
+vendor/
+
+.sass-cache/
+
+*.iml
+.idea/
+
+npm-debug.log
+
