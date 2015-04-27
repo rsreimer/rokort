@@ -1,4 +1,6 @@
-app.directive('longpress', function() {
+angular
+    .module('rokort')
+    .directive('longpress', function() {
     return {
         scope: {
             longpress: '&'
