@@ -5,7 +5,7 @@ function addTripForm(Settings, Trips) {
         restrict: 'E',
         scope: {},
         bindToController: true,
-        templateUrl: "/app/components/trips/add-trip-form.html",
+        templateUrl: "trips/add-trip-form.html",
         controllerAs: "ctrl",
         controller: function () {
             Trips.getAll()

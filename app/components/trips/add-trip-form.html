@@ -1,4 +1,6 @@
-<div class="form-group">
+<h1>Add trip</h1>
+
+<div class="row">
     <div class="col-xs-6">
         <div class="radio" ng-repeat="description in ctrl.descriptions">
             <label><input ng-model="ctrl.newTrip.description" type="radio" value="{{description}}">{{description}}</label>

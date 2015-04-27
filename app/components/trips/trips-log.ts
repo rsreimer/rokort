@@ -6,7 +6,7 @@ function tripsLog(Trips) {
         scope: {
         },
         bindToController: true,
-        templateUrl: "/app/components/trips/trips-log.html",
+        templateUrl: "trips/trips-log.html",
         controllerAs: "ctrl",
         controller: function () {
             Trips.getAll()

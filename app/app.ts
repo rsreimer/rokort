@@ -1,10 +1,12 @@
 angular
     .module('rokort', ['ngAnimate', 'ui.router'])
 
-    .config(function ($stateProvider) {
+    .config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('trips', {
                 url: '/',
-                template: '<trips></trips>'
+                template: '<add-trip-form></add-trip-form> <trips-log></trips-log>'
             });
+
+        $urlRouterProvider.otherwise('/');
     });

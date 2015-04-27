@@ -5,6 +5,7 @@ var browserSync = require('browser-sync');
 
 
 // VARIABLES ======================================================
+var moduleName = 'rokort';
 var isDist = $.util.env.type === 'dist';
 var outputFolder = isDist ? 'dist' : 'build';
 
@@ -84,7 +85,7 @@ gulp.task('templates', function () {
       spare: true,
       quotes: true
     }))
-    .pipe($.ngHtml2js({moduleName: 'templates'}))
+    .pipe($.ngHtml2js({moduleName: moduleName, declareModule: false}))
     .pipe($.concat('templates.js'))
     .pipe(isDist ? $.uglify() : $.util.noop())
     .pipe(gulp.dest(destinations.js))
