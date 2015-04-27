@@ -4,7 +4,7 @@
     header("Expires: Wed, 11 Jan 1984 05:00:00 GMT");
     header('Content-type: text/cache-manifest');
 ?>CACHE MANIFEST
-# version 2.2.1
+# version 2.2.2
 
 app.css
 app.js

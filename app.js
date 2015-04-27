@@ -90,15 +90,15 @@ app.directive('longpress', function() {
                 element.classList.add("long-press");
             }
 
-            function end() {
+            function cancel() {
                 clearTimeout(timer);
                 element.classList.remove("long-press");
             }
 
             element.addEventListener('touchstart', start);
-            element.addEventListener('touchend', end);
+            document.addEventListener('touchend', cancel);
             element.addEventListener('mousedown', start);
-            element.addEventListener('mouseup', end);
+            document.addEventListener('mouseup', cancel);
         }
     }
 });
