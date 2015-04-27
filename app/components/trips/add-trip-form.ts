@@ -4,7 +4,6 @@ function addTripForm(Settings, Trips) {
     return {
         restrict: 'E',
         scope: {},
-        bindToController: true,
         templateUrl: "trips/add-trip-form.html",
         controllerAs: "ctrl",
         controller: function () {
