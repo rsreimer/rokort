@@ -9,7 +9,7 @@ angular
             })
             .state('trips', {
                 url: '/trips',
-                template: '<add-trip-form></add-trip-form> <trips-log></trips-log>'
+                template: '<trips-log></trips-log>'
             });
 
         $urlRouterProvider.otherwise('/');

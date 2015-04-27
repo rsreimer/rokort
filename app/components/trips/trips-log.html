@@ -1,9 +1,33 @@
+<h1>Add trip</h1>
+<div class="row">
+    <div class="col-xs-6">
+        <div class="radio" ng-repeat="description in ctrl.descriptions">
+            <label><input ng-model="ctrl.newTrip.description" type="radio" value="{{description}}">{{description}}</label>
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="radio" ng-repeat="boat in ctrl.boats">
+            <label><input type="radio" ng-model="ctrl.newTrip.boat" value="{{boat.id}}">{{boat.name}}</label>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <h2 class="center">{{ctrl.newTrip.distance}} km</h2>
+    <input type="range" ng-model="ctrl.newTrip.distance" step="1" min="1" max="20">
+</div>
+
+<div class="form-group">
+    <button ng-disabled="ctrl.adding" class="btn btn-lg btn-default" ng-click="ctrl.addTrip(ctrl.newTrip)">Add trip</button>
+</div>
+
 <h1>Trips</h1>
 <table class="log table table-striped" ng-show="ctrl.trips">
     <thead>
     <tr><th>Started</th><th>Distance</th><th>Total</th></tr>
     </thead>
     <tbody>
-    <tr class="slide" ng-repeat="trip in ctrl.trips track by trip.date" longpress="deleteTrip(trip.id)"><td>{{trip.date}}</td><td>{{trip.distance}}</td><td>{{trip.total}}</td></tr>
+    <tr class="slide" ng-repeat="trip in ctrl.trips track by trip.date" longpress="ctrl.deleteTrip(trip.id)"><td>{{trip.date}}</td><td>{{trip.distance}}</td><td>{{trip.total}}</td></tr>
     </tbody>
 </table>
