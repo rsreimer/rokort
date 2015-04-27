@@ -2,30 +2,31 @@ angular
     .module('rokort')
     .directive('longpress', function() {
     return {
+        restrict: 'A',
         scope: {
             longpress: '&'
         },
         link: function(scope, element) {
             var timer;
-            element = element[0];
 
             function start() {
-                timer = setTimeout(function() {
+                timer = setTimeout(() => {
                     scope.longpress();
-                    element.classList.remove("long-press");
+                    element.removeClass("long-press");
                 }, 500);
 
-                element.classList.add("long-press");
+                element.addClass("long-press");
             }
 
             function cancel() {
                 clearTimeout(timer);
-                element.classList.remove("long-press");
+                element.removeClass("long-press");
             }
 
-            element.addEventListener('touchstart', start);
+            element.on('touchstart', start);
+            element.on('mousedown', start);
+
             document.addEventListener('touchend', cancel);
-            element.addEventListener('mousedown', start);
             document.addEventListener('mouseup', cancel);
         }
     }

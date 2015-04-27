@@ -9,32 +9,29 @@ angular
             templateUrl: "/app/components/trips/add-trip-form.html",
             controllerAs: "ctrl",
             controller: function () {
-                var ctrl = this;
-
                 Trips.getAll()
-                    .then(function(trips) {
-                        ctrl.trips = trips;
-                    });
+                    .then(trips => this.trips = trips);
 
-                ctrl.descriptions = Settings.descriptions;
-                ctrl.boats = Settings.boats;
+                this.descriptions = Settings.descriptions;
+                this.boats = Settings.boats;
 
-                ctrl.newTrip = {
+                this.newTrip = {
                     rower: Settings.rower,
-                    boat: ctrl.boats[0].id,
-                    description: ctrl.descriptions[0],
+                    boat: this.boats[0].id,
+                    description: this.descriptions[0],
                     distance: Settings.distance
                 };
 
-                ctrl.addTrip = function (trip) {
-                    ctrl.adding = true;
+                this.addTrip = function (trip) {
+                    this.adding = true;
 
                     Trips.addTrip(trip)
-                        .then(function() {
+                        .then(() => {
+
                             Trips.getAll()
-                                .then(function(trips) {
-                                    ctrl.adding = false;
-                                    ctrl.trips = trips;
+                                .then(trips => {
+                                    this.adding = false;
+                                    this.trips = trips;
                                 })
                         })
                 }
