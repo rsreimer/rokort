@@ -13,7 +13,7 @@ var globs = {
   sass: 'app/**/*.scss',
   templates: 'app/components/**/*.html',
   assets: 'app/assets/**/*.*',
-  app: ['app/**/*.ts', '!app/types'],
+  app: ['app/components/**/*.ts', 'app/app.ts'],
   index: 'app/index.html',
   manifest: 'app/manifest.json'
 };
@@ -57,22 +57,22 @@ var isProduction = process.argv[3] === '--prod';
 
 // TASKS ===========================================================
 
-gulp.task('sass', function () {
+function sass() {
   return gulp.src(globs.sass)
     .pipe($.sass({style: 'compressed', errLogToConsole: true}))
     .pipe($.autoprefixer())  // defauls to > 1%, last 2 versions, Firefox ESR, Opera 12.1
     .pipe(isProduction ? $.concat('app.css') : $.util.noop())
     .pipe(gulp.dest(destinations.css))
     .pipe(browserSync.reload({stream: true}));
-});
+}
 
-gulp.task('ts-lint', function () {
+function tsLint() {
   return gulp.src(globs.app)
     .pipe($.tslint())
     .pipe($.tslint.report('prose', {emitError: true}));
-});
+}
 
-gulp.task('ts-compile', function () {
+function tsCompile() {
   var tsResult = gulp.src(globs.app)
     .pipe($.typescript(tsProject));
 
@@ -83,9 +83,9 @@ gulp.task('ts-compile', function () {
     .pipe($.wrap('(function(){<%= contents %>}());'))
     .pipe(gulp.dest(destinations.js))
     .pipe(browserSync.reload({stream: true}));
-});
+}
 
-gulp.task('templates', function () {
+function templates() {
   return gulp.src(globs.templates)
     .pipe($.minifyHtml({
       empty: true,
@@ -97,47 +97,47 @@ gulp.task('templates', function () {
     .pipe(isProduction ? $.uglify() : $.util.noop())
     .pipe(gulp.dest(destinations.js))
     .pipe(browserSync.reload({stream: true}));
-});
+}
 
-gulp.task('clean', function (cb) {
+function clean(cb) {
   del('build', cb);
-});
+}
 
-gulp.task('browser-sync', function () {
+function setupBrowserSync() {
   return browserSync({
     open: false,
     server: {
-      baseDir: "./build"
+      baseDir: 'build'
     },
     watchOptions: {
       debounceDelay: 1000
     }
   });
-});
+}
 
-gulp.task('copy-vendor-js', function () {
+function copyVendorJs() {
   return gulp.src(libs.js)
     .pipe($.concat('vendor.min.js'))
     .pipe(gulp.dest(destinations.libs))
-});
+}
 
-gulp.task('copy-vendor-css', function () {
+function copyVendorCss() {
   return gulp.src(libs.css)
     .pipe($.concat('vendor.min.css'))
     .pipe(gulp.dest(destinations.libs))
-});
+}
 
-gulp.task('copy-assets', function () {
+function copyAssets() {
   return gulp.src(globs.assets)
     .pipe(gulp.dest(destinations.assets));
-});
+}
 
-gulp.task('copy-manifest', function () {
+function copyManifest() {
   return gulp.src(globs.manifest)
     .pipe(gulp.dest(destinations.manifest));
-});
+}
 
-gulp.task('index', function () {
+function index() {
   return gulp.src(globs.index)
     .pipe($.inject(gulp.src(injectPaths, {read: false}), {
         ignorePath: outputFolder,
@@ -149,27 +149,21 @@ gulp.task('index', function () {
       quotes: true
     }))
     .pipe(gulp.dest(destinations.index));
-});
+}
 
-gulp.task('watch', function() {
-  gulp.watch(globs.sass, 'sass');
-  gulp.watch(globs.app, gulp.series('ts-lint', 'ts-compile'));
-  gulp.watch(globs.templates, 'templates');
-  gulp.watch(globs.index, 'index');
-  gulp.watch(globs.assets, 'copy-assets');
-  gulp.watch(globs.manifest, 'copy-manifest');
-});
+function watch() {
+  gulp.watch(globs.sass, sass);
+  gulp.watch(globs.app, gulp.series(tsLint, tsCompile));
+  gulp.watch(globs.templates, templates);
+  gulp.watch(globs.index, index);
+  gulp.watch(globs.assets, copyAssets);
+  gulp.watch(globs.manifest, copyManifest);
+}
 
-gulp.task(
-  'build',
-  gulp.series(
-    'clean',
-    gulp.parallel('sass', 'copy-assets', 'copy-manifest', 'ts-compile', 'templates', 'copy-vendor-css', 'copy-vendor-js'),
-    'index'
-  )
-);
+gulp.task('build', gulp.series(
+    clean,
+    gulp.parallel(sass, copyAssets, copyManifest, tsCompile, templates, copyVendorCss, copyVendorJs),
+    index
+  ));
 
-gulp.task(
-  'default',
-  gulp.series('build', gulp.parallel('browser-sync', 'watch'))
-);
+gulp.task('default', gulp.series('build', gulp.parallel(setupBrowserSync, watch)));
