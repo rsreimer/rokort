@@ -16,6 +16,7 @@
     "gulp-minify-html": "^1.0.1",
     "gulp-ng-annotate": "^0.5.2",
     "gulp-ng-html2js": "^0.2.0",
+    "gulp-rev": "^3.0.1",
     "gulp-sass": "git://github.com/Keats/gulp-sass",
     "gulp-tslint": "^1.4.1",
     "gulp-typescript": "^2.3.0",
