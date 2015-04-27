@@ -1,3 +1,5 @@
+api/authinfo.php
+
 build/
 
 # You should commit npm/bower packages in your projects
@@ -11,4 +13,3 @@ vendor/
 
 npm-debug.log
 
-api/user.php

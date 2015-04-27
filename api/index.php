@@ -6,8 +6,8 @@ $app = new \Slim\Slim();
 
 
 // Rokort API
-require 'user.php'; // Set $username and $password in user.php
-$rokortApi = new RokortApi($username, $password);
+require 'authinfo.php'; // Set $siteid and $guid in authinfo.php
+$rokortApi = new RokortApi($siteid, $guid);
 $tripApi = new TripApi($rokortApi);
 
 
