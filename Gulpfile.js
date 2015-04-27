@@ -39,10 +39,10 @@ var libs = {
 };
 
 var injectPaths = [
-  destinations.libs + '/vendor.min.js',
-  destinations.libs + '/vendor.min.css',
+  destinations.libs + '/vendor-*.js',
+  destinations.libs + '/vendor-*.css',
   destinations.js + "/**/*.js",
-  destinations.js + "/templates.js",
+  destinations.js + "/templates-*.js",
   destinations.css + "/**/*.css"
 ];
 
@@ -62,6 +62,7 @@ function sass() {
     .pipe($.sass({style: 'compressed', errLogToConsole: true}))
     .pipe($.autoprefixer())  // defauls to > 1%, last 2 versions, Firefox ESR, Opera 12.1
     .pipe(isProduction ? $.concat('app.css') : $.util.noop())
+    .pipe($.rev())
     .pipe(gulp.dest(destinations.css))
     .pipe(browserSync.reload({stream: true}));
 }
@@ -81,6 +82,7 @@ function tsCompile() {
     .pipe($.ngAnnotate({gulpWarnings: false}))
     .pipe(isProduction ? $.uglify() : $.util.noop())
     .pipe($.wrap('(function(){<%= contents %>}());'))
+    .pipe($.rev())
     .pipe(gulp.dest(destinations.js))
     .pipe(browserSync.reload({stream: true}));
 }
@@ -95,6 +97,7 @@ function templates() {
     .pipe($.ngHtml2js({moduleName: moduleName, declareModule: false}))
     .pipe($.concat('templates.js'))
     .pipe(isProduction ? $.uglify() : $.util.noop())
+    .pipe($.rev())
     .pipe(gulp.dest(destinations.js))
     .pipe(browserSync.reload({stream: true}));
 }
@@ -117,13 +120,15 @@ function setupBrowserSync() {
 
 function copyVendorJs() {
   return gulp.src(libs.js)
-    .pipe($.concat('vendor.min.js'))
+    .pipe($.concat('vendor.js'))
+    .pipe($.rev())
     .pipe(gulp.dest(destinations.libs))
 }
 
 function copyVendorCss() {
   return gulp.src(libs.css)
-    .pipe($.concat('vendor.min.css'))
+    .pipe($.concat('vendor.css'))
+    .pipe($.rev())
     .pipe(gulp.dest(destinations.libs))
 }
 
