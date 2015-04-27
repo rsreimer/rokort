@@ -1,10 +1,14 @@
 angular
-    .module('rokort', ['ngAnimate', 'ui.router'])
+    .module('rokort', ['ngAnimate', 'ngSanitize', 'ui.router', 'ui.select'])
 
     .config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
-            .state('trips', {
+            .state('welcome', {
                 url: '/',
+                template: '<rower-picker></rower-picker>'
+            })
+            .state('trips', {
+                url: '/trips',
                 template: '<add-trip-form></add-trip-form> <trips-log></trips-log>'
             });
 

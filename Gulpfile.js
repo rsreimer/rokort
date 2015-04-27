@@ -31,12 +31,15 @@ var destinations = {
 
 var libs = {
   css: [
-    'vendor/bootstrap/dist/css/bootstrap.css'
+    'vendor/bootstrap/dist/css/bootstrap.css',
+    'vendor/angular-ui-select/dist/select.css'
   ],
   js: [
-  'vendor/angular/angular.js',
-  'vendor/angular-animate/angular-animate.js',
-  'vendor/ui-router/release/angular-ui-router.js'
+    'vendor/angular/angular.js',
+    'vendor/angular-animate/angular-animate.js',
+    'vendor/angular-sanitize/angular-sanitize.js',
+    'vendor/ui-router/release/angular-ui-router.js',
+    'vendor/angular-ui-select/dist/select.js'
   ]
 };
 
