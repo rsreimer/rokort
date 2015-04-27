@@ -1,41 +1,40 @@
-angular
-    .module('rokort')
-    .directive('addTripForm', function(Settings, Trips) {
-        return {
-            restrict: 'E',
-            scope: {
-            },
-            bindToController: true,
-            templateUrl: "/app/components/trips/add-trip-form.html",
-            controllerAs: "ctrl",
-            controller: function () {
-                Trips.getAll()
-                    .then(trips => this.trips = trips);
+angular.module('rokort').directive('addTripForm', addTripForm);
 
-                this.descriptions = Settings.descriptions;
-                this.boats = Settings.boats;
+function addTripForm(Settings, Trips) {
+    return {
+        restrict: 'E',
+        scope: {},
+        bindToController: true,
+        templateUrl: "/app/components/trips/add-trip-form.html",
+        controllerAs: "ctrl",
+        controller: function () {
+            Trips.getAll()
+                .then(trips => this.trips = trips);
 
-                this.newTrip = {
-                    rower: Settings.rower,
-                    boat: this.boats[0].id,
-                    description: this.descriptions[0],
-                    distance: Settings.distance
-                };
+            this.descriptions = Settings.descriptions;
+            this.boats = Settings.boats;
 
-                this.addTrip = function (trip) {
-                    this.adding = true;
+            this.newTrip = {
+                rower: Settings.rower,
+                boat: this.boats[0].id,
+                description: this.descriptions[0],
+                distance: Settings.distance
+            };
 
-                    Trips.addTrip(trip)
-                        .then(() => {
+            this.addTrip = function (trip) {
+                this.adding = true;
 
-                            Trips.getAll()
-                                .then(trips => {
-                                    this.adding = false;
-                                    this.trips = trips;
-                                })
-                        })
-                }
+                Trips.addTrip(trip)
+                    .then(() => {
+
+                        Trips.getAll()
+                            .then(trips => {
+                                this.adding = false;
+                                this.trips = trips;
+                            })
+                    })
             }
         }
-    });
+    }
+}
 

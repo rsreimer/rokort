@@ -1,6 +1,6 @@
-angular
-    .module('rokort')
-    .directive('longpress', function() {
+angular.module('rokort').directive('longpress', longpress);
+
+function longpress() {
     return {
         restrict: 'A',
         scope: {
@@ -30,4 +30,4 @@ angular
             document.addEventListener('mouseup', cancel);
         }
     }
-});
+}

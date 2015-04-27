@@ -1,6 +1,6 @@
-angular
-    .module('rokort')
-    .service('Trips', function($http, Settings) {
+angular.module('rokort').service('Trips', Trips);
+
+function Trips($http, Settings) {
     return {
         getAll: function () {
             return $http.get('api/profile/' + Settings.rower)
@@ -15,4 +15,4 @@ angular
             return $http.post('api/trip', trip)
         }
     }
-});
+}

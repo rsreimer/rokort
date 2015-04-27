@@ -13,7 +13,8 @@ var globs = {
   templates: 'app/components/**/*.html',
   assets: 'app/assets/**/*.*',
   app: ['app/**/*.ts', '!app/types'],
-  index: 'app/index.html'
+  index: 'app/index.html',
+  manifest: 'app/manifest.json'
 };
 
 var destinations = {
@@ -21,49 +22,27 @@ var destinations = {
   js: outputFolder + "/src",
   libs: outputFolder + "/vendor",
   assets: outputFolder + "/assets",
-  index: outputFolder
+  index: outputFolder,
+  manifest: outputFolder
 };
 
-// When adding a 3rd party we want to insert in the html, add it to
-// vendoredLibs, order matters
-var vendoredLibs = [
-  'vendor/angular/angular.js',
-  'vendor/angular-animate/angular-animate.js',
-  'vendor/ui-router/release/angular-ui-router.js'
+var src = [
+  destinations.js + "/**/*.js",
+  destinations.js + "/templates.js",
+  destinations.css + "/**/*.css"
 ];
 
-// Will be filled automatically
-var vendoredLibsMin = [];
+var libs = [
+    'vendor/bootstrap/dist/css/bootstrap.min.css',
 
-var injectLibsPaths = {
-  dev: [],
-  dist: []
-};
+    'vendor/angular/angular.min.js',
+    'vendor/angular-animate/angular-animate.min.js',
+    'vendor/ui-router/release/angular-ui-router.min.js'
+];
 
-var injectPaths = {
-  dev: [],
-  dist: []
-};
-
-vendoredLibs.forEach(function(lib) {
-  // take the filename
-  var splittedPath = lib.split('/');
-  var filename = splittedPath[splittedPath.length -1];
-  injectLibsPaths.dev.push(destinations.libs + '/' + filename);
-  // And get the minified version
-  filename = filename.split('.')[0] + '.min.js';
-  splittedPath[splittedPath.length - 1] = filename;
-  vendoredLibsMin.push(splittedPath.join('/'));
-  injectLibsPaths.dist.push(destinations.libs + '/' + filename);
-});
-
-['dev', 'dist'].forEach(function (env) {
-  injectPaths[env] = injectLibsPaths[env].concat([
-    destinations.js + "/**/*.js",
-    destinations.js + "/templates.js",
-    destinations.css + "/**/*.css"
-  ]);
-});
+var injectPaths = libs.map(function(lib) {
+  return destinations.libs + '/' + lib.split('/').pop();
+}).concat(src);
 
 var tsProject = $.typescript.createProject({
   declarationFiles: true,
@@ -129,7 +108,7 @@ gulp.task('browser-sync', function () {
 });
 
 gulp.task('copy-vendor', function () {
-  return gulp.src(isDist ? vendoredLibsMin : vendoredLibs)
+  return gulp.src(libs)
     .pipe(gulp.dest(destinations.libs));
 });
 
@@ -138,16 +117,19 @@ gulp.task('copy-assets', function () {
     .pipe(gulp.dest(destinations.assets));
 });
 
-gulp.task('index', function () {
-  var target = gulp.src(globs.index);
-  var _injectPaths = isDist ? injectPaths.dist : injectPaths.dev;
+gulp.task('copy-manifest', function () {
+  return gulp.src(globs.manifest)
+    .pipe(gulp.dest(destinations.manifest));
+});
 
-  return target.pipe(
-    $.inject(gulp.src(_injectPaths, {read: false}), {
-      ignorePath: outputFolder,
-      addRootSlash: false
-    })
-  ).pipe(gulp.dest(destinations.index));
+gulp.task('index', function () {
+  return gulp.src(globs.index)
+    .pipe(
+      $.inject(gulp.src(injectPaths, {read: false}), {
+        ignorePath: outputFolder,
+        addRootSlash: false
+      })
+    ).pipe(gulp.dest(destinations.index));
 });
 
 gulp.task('watch', function() {
@@ -156,13 +138,14 @@ gulp.task('watch', function() {
   gulp.watch(globs.templates, 'templates');
   gulp.watch(globs.index, 'index');
   gulp.watch(globs.assets, 'copy-assets');
+  gulp.watch(globs.manifest, 'copy-manifest');
 });
 
 gulp.task(
   'build',
   gulp.series(
     'clean',
-    gulp.parallel('sass', 'copy-assets', 'ts-compile', 'templates', 'copy-vendor'),
+    gulp.parallel('sass', 'copy-assets', 'copy-manifest', 'ts-compile', 'templates', 'copy-vendor'),
     'index'
   )
 );
