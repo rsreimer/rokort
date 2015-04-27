@@ -7,6 +7,8 @@ var browserSync = require('browser-sync');
 // VARIABLES ======================================================
 var moduleName = 'rokort';
 
+var isProduction = process.argv[3] === '--prod';
+
 var outputFolder = 'build';
 
 var globs = {
@@ -21,7 +23,7 @@ var globs = {
 var destinations = {
   css: outputFolder + "/style",
   js: outputFolder + "/src",
-  libs: outputFolder + "/vendor",
+  vendor: outputFolder + "/vendor",
   assets: outputFolder + "/assets",
   index: outputFolder,
   manifest: outputFolder
@@ -38,22 +40,38 @@ var libs = {
   ]
 };
 
-var injectPaths = [
-  destinations.libs + '/vendor-*.js',
-  destinations.libs + '/vendor-*.css',
-  destinations.js + "/**/*.js",
-  destinations.js + "/templates-*.js",
-  destinations.css + "/**/*.css"
-];
+var injectPaths = [];
 
+if (isProduction) {
+  libs.js = libs.js.map(function(file) {
+    return file.replace('.js', '.min.js');
+  });
+
+  libs.css = libs.css.map(function(file) {
+    return file.replace('.css', '.min.css');
+  });
+
+  injectPaths = injectPaths.concat([
+    destinations.vendor + "/vendor-*.js",
+    destinations.vendor + "/vendor-*.css"
+  ]);
+} else {
+  var src = libs.css.concat(libs.js);
+  injectPaths = injectPaths.concat(src.map(function (file) {
+    return destinations.vendor + '/' + file.split('/').pop();
+  }));
+}
+
+injectPaths = injectPaths.concat([
+  destinations.js + "/**/*.js",
+  destinations.js + "/templates*.js",
+  destinations.css + "/**/*.css"
+]);
 
 var tsProject = $.typescript.createProject({
   declarationFiles: true,
   noExternalResolve: true
 });
-
-var isProduction = process.argv[3] === '--prod';
-
 
 // TASKS ===========================================================
 
@@ -62,9 +80,8 @@ function sass() {
     .pipe($.sass({style: 'compressed', errLogToConsole: true}))
     .pipe($.autoprefixer())  // defauls to > 1%, last 2 versions, Firefox ESR, Opera 12.1
     .pipe(isProduction ? $.concat('app.css') : $.util.noop())
-    .pipe($.rev())
+    .pipe(isProduction ? $.rev() : $.util.noop())
     .pipe(gulp.dest(destinations.css))
-    .pipe(browserSync.reload({stream: true}));
 }
 
 function tsLint() {
@@ -82,9 +99,8 @@ function tsCompile() {
     .pipe($.ngAnnotate({gulpWarnings: false}))
     .pipe(isProduction ? $.uglify() : $.util.noop())
     .pipe($.wrap('(function(){<%= contents %>}());'))
-    .pipe($.rev())
-    .pipe(gulp.dest(destinations.js))
-    .pipe(browserSync.reload({stream: true}));
+    .pipe(isProduction ? $.rev() : $.util.noop())
+    .pipe(gulp.dest(destinations.js));
 }
 
 function templates() {
@@ -97,9 +113,8 @@ function templates() {
     .pipe($.ngHtml2js({moduleName: moduleName, declareModule: false}))
     .pipe($.concat('templates.js'))
     .pipe(isProduction ? $.uglify() : $.util.noop())
-    .pipe($.rev())
-    .pipe(gulp.dest(destinations.js))
-    .pipe(browserSync.reload({stream: true}));
+    .pipe(isProduction ? $.rev() : $.util.noop())
+    .pipe(gulp.dest(destinations.js));
 }
 
 function clean(cb) {
@@ -119,27 +134,17 @@ function setupBrowserSync() {
 }
 
 function copyVendorJs() {
-  var src = !isProduction ? libs.js :
-    libs.js.map(function(file) {
-      return file.replace('.js', '.min.js');
-    });
-
-  return gulp.src(src)
+  return gulp.src(libs.js)
     .pipe(isProduction ? $.concat('vendor.js') : $.util.noop())
-    .pipe($.rev())
-    .pipe(gulp.dest(destinations.libs))
+    .pipe(isProduction ? $.rev() : $.util.noop())
+    .pipe(gulp.dest(destinations.vendor))
 }
 
 function copyVendorCss() {
-  var src = !isProduction ? libs.css :
-    libs.css.map(function(file) {
-      return file.replace('.css', '.min.css');
-    });
-
-  return gulp.src(src)
+  return gulp.src(libs.css)
     .pipe(isProduction ? $.concat('vendor.css') : $.util.noop())
-    .pipe($.rev())
-    .pipe(gulp.dest(destinations.libs))
+    .pipe(isProduction ? $.rev() : $.util.noop())
+    .pipe(gulp.dest(destinations.vendor))
 }
 
 function copyAssets() {
@@ -163,12 +168,13 @@ function index() {
       spare: true,
       quotes: true
     }))
-    .pipe(gulp.dest(destinations.index));
+    .pipe(gulp.dest(destinations.index))
+    .pipe(browserSync.reload({stream: true}));
 }
 
 function watch() {
   gulp.watch(globs.sass, gulp.series(sass, index));
-  gulp.watch(globs.app, gulp.series(tsLint, tsCompile, index));
+  gulp.watch(globs.app, gulp.series(tsCompile, index));
   gulp.watch(globs.templates, gulp.series(templates, index));
   gulp.watch(globs.index, index);
   gulp.watch(globs.assets, copyAssets);
