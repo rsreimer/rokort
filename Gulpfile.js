@@ -7,7 +7,7 @@ var browserSync = require('browser-sync');
 // VARIABLES ======================================================
 var moduleName = 'rokort';
 var isDist = $.util.env.type === 'dist';
-var outputFolder = isDist ? 'dist' : 'build';
+var outputFolder = 'build';
 
 var globs = {
   sass: 'app/**/*.scss',
@@ -27,23 +27,24 @@ var destinations = {
   manifest: outputFolder
 };
 
-var src = [
+var libs = {
+  css: [
+    'vendor/bootstrap/dist/css/bootstrap.min.css'
+  ],
+  js: [
+  'vendor/angular/angular.min.js',
+  'vendor/angular-animate/angular-animate.min.js',
+  'vendor/ui-router/release/angular-ui-router.min.js'
+  ]
+};
+
+var injectPaths = [
+  destinations.libs + '/vendor.js',
+  destinations.libs + '/vendor.css',
   destinations.js + "/**/*.js",
   destinations.js + "/templates.js",
   destinations.css + "/**/*.css"
 ];
-
-var libs = [
-    'vendor/bootstrap/dist/css/bootstrap.min.css',
-
-    'vendor/angular/angular.min.js',
-    'vendor/angular-animate/angular-animate.min.js',
-    'vendor/ui-router/release/angular-ui-router.min.js'
-];
-
-var injectPaths = libs.map(function(lib) {
-  return destinations.libs + '/' + lib.split('/').pop();
-}).concat(src);
 
 var tsProject = $.typescript.createProject({
   declarationFiles: true,
@@ -56,6 +57,7 @@ gulp.task('sass', function () {
   return gulp.src(globs.sass)
     .pipe($.sass({style: 'compressed', errLogToConsole: true}))
     .pipe($.autoprefixer())  // defauls to > 1%, last 2 versions, Firefox ESR, Opera 12.1
+    .pipe(isDist ? $.concat('app.css') : $.util.noop())
     .pipe(gulp.dest(destinations.css))
     .pipe(browserSync.reload({stream: true}));
 });
@@ -70,7 +72,8 @@ gulp.task('ts-compile', function () {
   var tsResult = gulp.src(globs.app)
     .pipe($.typescript(tsProject));
 
-  return tsResult.js.pipe(isDist ? $.concat('app.js') : $.util.noop())
+  return tsResult.js
+    .pipe(isDist ? $.concat('app.js') : $.util.noop())
     .pipe($.ngAnnotate({gulpWarnings: false}))
     .pipe(isDist ? $.uglify() : $.util.noop())
     .pipe($.wrap('(function(){<%= contents %>}());'))
@@ -93,7 +96,7 @@ gulp.task('templates', function () {
 });
 
 gulp.task('clean', function (cb) {
-  del(['dist/', 'build/'], cb);
+  del('build', cb);
 });
 
 gulp.task('browser-sync', function () {
@@ -108,9 +111,16 @@ gulp.task('browser-sync', function () {
   });
 });
 
-gulp.task('copy-vendor', function () {
-  return gulp.src(libs)
-    .pipe(gulp.dest(destinations.libs));
+gulp.task('copy-vendor-js', function () {
+  return gulp.src(libs.js)
+    .pipe($.concat('vendor.js'))
+    .pipe(gulp.dest(destinations.libs))
+});
+
+gulp.task('copy-vendor-css', function () {
+  return gulp.src(libs.css)
+    .pipe($.concat('vendor.css'))
+    .pipe(gulp.dest(destinations.libs))
 });
 
 gulp.task('copy-assets', function () {
@@ -125,12 +135,16 @@ gulp.task('copy-manifest', function () {
 
 gulp.task('index', function () {
   return gulp.src(globs.index)
-    .pipe(
-      $.inject(gulp.src(injectPaths, {read: false}), {
+    .pipe($.inject(gulp.src(injectPaths, {read: false}), {
         ignorePath: outputFolder,
         addRootSlash: false
-      })
-    ).pipe(gulp.dest(destinations.index));
+      }))
+    .pipe($.minifyHtml({
+      empty: true,
+      spare: true,
+      quotes: true
+    }))
+    .pipe(gulp.dest(destinations.index));
 });
 
 gulp.task('watch', function() {
@@ -146,7 +160,7 @@ gulp.task(
   'build',
   gulp.series(
     'clean',
-    gulp.parallel('sass', 'copy-assets', 'copy-manifest', 'ts-compile', 'templates', 'copy-vendor'),
+    gulp.parallel('sass', 'copy-assets', 'copy-manifest', 'ts-compile', 'templates', 'copy-vendor-css', 'copy-vendor-js'),
     'index'
   )
 );
