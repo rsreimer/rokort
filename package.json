@@ -1,0 +1,27 @@
+{
+  "name": "rokort",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "gulp": "./node_modules/gulp/bin/gulp.js"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.2.3",
+    "del": "^1.0.0",
+    "gulp": "gulpjs/gulp.git#4.0",
+    "gulp-autoprefixer": "2.1.0",
+    "gulp-concat": "^2.4.2",
+    "gulp-inject": "^1.0.1",
+    "gulp-load-plugins": "^0.8.1",
+    "gulp-minify-html": "^1.0.1",
+    "gulp-ng-annotate": "^0.5.2",
+    "gulp-ng-html2js": "^0.2.0",
+    "gulp-sass": "git://github.com/Keats/gulp-sass",
+    "gulp-tslint": "^1.4.1",
+    "gulp-typescript": "^2.3.0",
+    "gulp-uglify": "^1.0.1",
+    "gulp-util": "^3.0.0",
+    "gulp-wrap": "^0.11.0",
+    "typescript": "^1.4.1"
+  }
+}
