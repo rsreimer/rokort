@@ -29,12 +29,12 @@ var destinations = {
 
 var libs = {
   css: [
-    'vendor/bootstrap/dist/css/bootstrap.min.css'
+    'vendor/bootstrap/dist/css/bootstrap.css'
   ],
   js: [
-  'vendor/angular/angular.min.js',
-  'vendor/angular-animate/angular-animate.min.js',
-  'vendor/ui-router/release/angular-ui-router.min.js'
+  'vendor/angular/angular.js',
+  'vendor/angular-animate/angular-animate.js',
+  'vendor/ui-router/release/angular-ui-router.js'
   ]
 };
 
@@ -119,15 +119,25 @@ function setupBrowserSync() {
 }
 
 function copyVendorJs() {
-  return gulp.src(libs.js)
-    .pipe($.concat('vendor.js'))
+  var src = !isProduction ? libs.js :
+    libs.js.map(function(file) {
+      return file.replace('.js', '.min.js');
+    });
+
+  return gulp.src(src)
+    .pipe(isProduction ? $.concat('vendor.js') : $.util.noop())
     .pipe($.rev())
     .pipe(gulp.dest(destinations.libs))
 }
 
 function copyVendorCss() {
-  return gulp.src(libs.css)
-    .pipe($.concat('vendor.css'))
+  var src = !isProduction ? libs.css :
+    libs.css.map(function(file) {
+      return file.replace('.css', '.min.css');
+    });
+
+  return gulp.src(src)
+    .pipe(isProduction ? $.concat('vendor.css') : $.util.noop())
     .pipe($.rev())
     .pipe(gulp.dest(destinations.libs))
 }
@@ -157,9 +167,9 @@ function index() {
 }
 
 function watch() {
-  gulp.watch(globs.sass, sass);
-  gulp.watch(globs.app, gulp.series(tsLint, tsCompile));
-  gulp.watch(globs.templates, templates);
+  gulp.watch(globs.sass, gulp.series(sass, index));
+  gulp.watch(globs.app, gulp.series(tsLint, tsCompile, index));
+  gulp.watch(globs.templates, gulp.series(templates, index));
   gulp.watch(globs.index, index);
   gulp.watch(globs.assets, copyAssets);
   gulp.watch(globs.manifest, copyManifest);
