@@ -3,16 +3,16 @@ angular.module('rokort').service('Trips', Trips);
 function Trips($http, Settings) {
     return {
         getAll: function () {
-            return $http.get('api/profile/' + Settings.rower)
+            return $http.get('http://rsreimer.com/andet/rokort/api/profile/' + Settings.rower)
                 .then(function(response) {
                     return response.data;
                 })
         },
         deleteTrip: function (id) {
-            return $http.delete('api/trip/' + id)
+            return $http.delete('http://rsreimer.com/andet/rokort/api/trip/' + id)
         },
         addTrip: function (trip) {
-            return $http.post('api/trip', trip)
+            return $http.post('http://rsreimer.com/andet/rokort/api/trip', trip)
         }
     }
 }

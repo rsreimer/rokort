@@ -1,24 +1,24 @@
 angular.module('rokort').directive('tripsLog', tripsLog);
 
-function tripsLog(Trips, Settings) {
+function tripsLog(Trips, Settings, Rower) {
     return {
+        templateUrl: "trips/trips-log.html",
         restrict: 'E',
         scope: {},
-        templateUrl: "trips/trips-log.html",
-        controllerAs: 'ctrl',
         bindToController: true,
+        controllerAs: 'ctrl',
         controller: function () {
             Trips.getAll()
                 .then(trips => this.trips = trips);
 
-            this.descriptions = Settings.descriptions;
-            this.boats = Settings.boats;
+            this.descriptions = Settings.get('descriptions');
+            this.boats = Settings.get('boats');
+            this.maxDistance = Settings.get('maxDistance');
 
             this.newTrip = {
-                rower: Settings.rower,
-                boat: this.boats[0].id,
-                description: this.descriptions[0],
-                distance: Settings.distance
+                rower: Rower.get(),
+                description: "",
+                distance: Settings.get('distance')
             };
 
             this.addTrip = function (trip) {
