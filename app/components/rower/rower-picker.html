@@ -13,6 +13,6 @@
 </div>
 
 <div ng-hide="ctrl.isEditing">
-    <span class="form-output">{{ctrl.selected.name}}</span>
     <button class="pull-right btn btn-default" ng-click="ctrl.isEditing = true"><span class="glyphicon glyphicon-pencil"></span></button>
+    <div class="form-control-static">{{ctrl.selected.name}}</div>
 </div>

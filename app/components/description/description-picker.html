@@ -1,0 +1,15 @@
+<div class="radio" ng-repeat="description in ctrl.descriptions">
+    <label><input ng-model="ctrl.selected" type="radio" value="{{description}}">{{description}}</label>
+</div>
+
+<div class="radio">
+    <label>
+        <input ng-model="ctrl.selected" value="custom" type="radio">
+        <div class="input-group">
+            <input class="form-control" placeholder="Something else..." ng-focus="ctrl.selected = 'custom'" ng-model="ctrl.custom">
+            <div class="input-group-btn">
+                <button class="btn btn-default"><span class="glyphicon glyphicon-pushpin"></span></button>
+            </div>
+        </div>
+    </label>
+</div>
