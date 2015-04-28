@@ -2,7 +2,7 @@ angular.module('rokort')
     .directive('rowerPicker', function() {
         return {
             restrict: 'E',
-            bindToController: true,
+            scope: {selected: '='},
             templateUrl: 'rower/rower-picker.html',
             controllerAs: 'ctrl',
             controller: RowerPickerController
@@ -14,9 +14,12 @@ class RowerPickerController {
     selected: Object;
     isEditing: Boolean = false;
 
-    constructor(private Rower) {
-        this.selected = Rower.get();
-        this.isEditing = this.selected === undefined;
+    constructor(private Rower, private $scope) {
+        var rower = Rower.get();
+
+        this.$scope.selected = rower;
+        this.selected = rower;
+        this.isEditing = rower === undefined;
 
         Rower.getAll()
             .then(rowers => this.rowers = rowers);
@@ -26,6 +29,7 @@ class RowerPickerController {
         if (!rower) return;
 
         this.Rower.set(rower);
+        this.$scope.selected = rower;
 
         this.isEditing = false;
     }

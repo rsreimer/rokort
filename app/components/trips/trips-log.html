@@ -1,4 +1,4 @@
-<rower-picker></rower-picker>
+<rower-picker selected="ctrl.rower"></rower-picker>
 
 <div class="row">
     <div class="col-xs-6">
@@ -20,8 +20,10 @@
 </div>
 
 <div class="form-group">
-    <button ng-disabled="ctrl.adding" class="btn btn-lg btn-default" ng-click="ctrl.addTrip(ctrl.newTrip)">Add trip</button>
+    <button ng-disabled="ctrl.adding" class="pull-right btn btn-lg btn-default" ng-click="ctrl.addTrip()">Add trip</button>
 </div>
+
+<div style="clear: both"></div>
 
 <h1>Trips</h1>
 <table class="log table table-striped" ng-show="ctrl.trips">

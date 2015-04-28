@@ -3,7 +3,7 @@ angular.module('rokort').service('Trips', Trips);
 function Trips($http, Settings) {
     return {
         getAll: function () {
-            return $http.get('http://rsreimer.com/andet/rokort/api/profile/' + Settings.rower)
+            return $http.get('http://rsreimer.com/andet/rokort/api/profile/' + Settings.get('rower').id)
                 .then(function(response) {
                     return response.data;
                 })
