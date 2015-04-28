@@ -3,20 +3,25 @@ angular.module('rokort')
         return {
             restrict: 'E',
             scope: {},
-            controllerAs: 'ctrl',
             templateUrl: 'rowers/rower-picker.html',
+            controllerAs: 'ctrl',
             controller: RowerPickerController
         };
     });
 
 class RowerPickerController {
-    rowers: Array<Number>;
+    rowers: Array<Object>;
+    selected: Object;
 
-    constructor(Rowers, private Settings) {
-        this.rowers = [{name: "Rasmus Reimer"}, {name: "Jurij"}, {name: "Morten Moth"}];
-    }
+    constructor(Rowers, private Settings, private $scope) {
+        Rowers
+            .getAll()
+            .then(rowers => this.rowers = rowers);
 
-    setRower(rowerid) {
-        this.Settings.set('rowerid', rowerid);
+        $scope.$watch(this.selected, () => {
+            if (!this.selected) return;
+
+            this.Settings.set('rowerid', this.selected.id);
+        });
     }
 }

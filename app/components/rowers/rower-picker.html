@@ -2,9 +2,9 @@
     <h1>Welcome</h1>
     <h3>What is your name?</h3>
     <form>
-        <ui-select ng-model="address.selected" theme="bootstrap">
+        <ui-select ng-model="ctrl.selected" theme="bootstrap">
             <ui-select-match placeholder="Your name...">{{$select.selected.name}}</ui-select-match>
-            <ui-select-choices repeat="rower in ctrl.rowers | filter:{name: $select.search} track by $index"
+            <ui-select-choices repeat="rower in ctrl.rowers | filter:{name: $select.search} | limitTo: 10 track by $index"
                                refresh-delay="0">
                 <div ng-bind-html="rower.name | highlight: $select.search"></div>
             </ui-select-choices>
