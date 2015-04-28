@@ -10,7 +10,14 @@
     </div>
     <ul class="list-group">
         <li class="list-group-item">
-            *Description and boat picker*
+            <div class="row">
+                <div class="col-xs-6">
+                    <description-picker selected="ctrl.newTrip.description"></description-picker>
+                </div>
+                <div class="col-xs-6">
+                    <description-picker selected="ctrl.newTrip.boat"></description-picker>
+                </div>
+            </div>
         </li>
         <li class="list-group-item">
             <div class="form-group">
@@ -20,14 +27,15 @@
         </li>
     </ul>
 
-
     <div class="panel-body align-right">
         <button ng-disabled="ctrl.adding" class="btn btn-lg btn-default" ng-click="ctrl.addTrip()">Add trip</button>
     </div>
 </div>
-<hr>
-<h2>Trips</h2>
+
 <div ng-show="ctrl.trips" class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Trips</strong>
+    </div>
     <table class="log table">
         <thead>
         <tr><th>Started</th><th>Distance</th><th>Total</th></tr>
