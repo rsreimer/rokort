@@ -9,6 +9,8 @@ $app = new \Slim\Slim();
 require 'authinfo.php'; // Set $siteid and $guid in authinfo.php
 $rokortApi = new RokortApi($siteid, $guid);
 $tripApi = new TripApi($rokortApi);
+$rowerApi = new RowerApi($rokortApi);
+$boatApi = new BoatApi($rokortApi);
 
 
 // Add new trip
@@ -27,6 +29,18 @@ $app->get('/profile/:rower', function ($rower) use ($tripApi) {
     	$tripApi->get_by_rower($rower, date('Y')),
     	$tripApi->get_by_rower($rower, date('Y')-1)
     ));
+});
+
+
+// Get a list of all rowers
+$app->get('/rower', function () use ($rowerApi) {
+    echo json_encode($rowerApi->get_all());
+});
+
+
+// Get a list of all boats
+$app->get('/boat', function () use ($boatApi) {
+    echo json_encode($boatApi->get_all());
 });
 
 

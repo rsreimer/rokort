@@ -14,6 +14,16 @@ class RokortApi {
 		));
 	}
 
+	public function query($id) {
+		$response = $this->get("/query.php?site=$this->siteid&id=$id");
+
+		libxml_use_internal_errors(true);
+		$doc = new DOMDocument();
+		$doc->loadHTML($response);
+
+		return $doc->getElementsByTagName("table")[2]->getElementsByTagName("tr");
+	}
+
 	/* Private */
 	private function login($siteid, $guid) {
 		$url = "/workshop/workshop.php?siteid=$siteid&guid=$guid";
@@ -25,6 +35,7 @@ class RokortApi {
 		// Grap session cookie from HTTP response header
 		preg_match('/^Set-Cookie:\s*([^;]*)/mi', $response, $match);
 
+		$this->siteid = $siteid;
 		$this->session_cookie = $match[1];
 	}
 
@@ -60,5 +71,6 @@ class RokortApi {
 	}
 
 	private $session_cookie = "";
+	private $siteid = "";
 	private $host = "http://www.rokort.dk";
 }
