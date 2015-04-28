@@ -23,6 +23,7 @@ var globs = {
 var destinations = {
   css: outputFolder + "/style",
   js: outputFolder + "/src",
+  fonts: outputFolder + "/fonts",
   vendor: outputFolder + "/vendor",
   assets: outputFolder + "/assets",
   index: outputFolder,
@@ -40,6 +41,13 @@ var libs = {
     'vendor/angular-sanitize/angular-sanitize.js',
     'vendor/ui-router/release/angular-ui-router.js',
     'vendor/angular-ui-select/dist/select.js'
+  ],
+  fonts: [
+    'vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.eot',
+    'vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.svg',
+    'vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf',
+    'vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.woff',
+    'vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2'
   ]
 };
 
@@ -150,6 +158,11 @@ function copyVendorCss() {
     .pipe(gulp.dest(destinations.vendor))
 }
 
+function copyVendorFonts() {
+  return gulp.src(libs.fonts)
+    .pipe(gulp.dest(destinations.fonts))
+}
+
 function copyAssets() {
   return gulp.src(globs.assets)
     .pipe(gulp.dest(destinations.assets));
@@ -186,7 +199,7 @@ function watch() {
 
 gulp.task('build', gulp.series(
     clean,
-    gulp.parallel(sass, copyAssets, copyManifest, tsCompile, templates, copyVendorCss, copyVendorJs),
+    gulp.parallel(sass, copyAssets, copyManifest, tsCompile, templates, copyVendorCss, copyVendorJs, copyVendorFonts),
     index
   ));
 
