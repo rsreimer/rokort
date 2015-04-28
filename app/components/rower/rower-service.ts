@@ -1,4 +1,5 @@
-angular.module('rokort').service('Rower', ($http, Settings) => new Rower($http, Settings));
+angular.module('rokort')
+    .service('Rower', ($http, Settings) => new Rower($http, Settings));
 
 class Rower {
     constructor(private $http, private Settings) { }
