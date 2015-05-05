@@ -33,4 +33,6 @@ function Trips($http, Settings, $q) {
 
         return deferred.promise;
     };
+
+    return service;
 }

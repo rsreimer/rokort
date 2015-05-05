@@ -1,13 +1,13 @@
 angular.module('rokort').directive('tripsLog', tripsLog);
 
-function tripsLog(Trips, Settings) {
+function tripsLog() {
     return {
         templateUrl: "trips/trips-log.html",
         restrict: 'E',
         scope: {},
         bindToController: true,
         controllerAs: 'ctrl',
-        controller: function ($scope) {
+        controller: function ($scope, Trips, Settings) {
             $scope.$watch('ctrl.rower', () => {
                 Trips
                     .getAll()
@@ -19,8 +19,6 @@ function tripsLog(Trips, Settings) {
             this.maxDistance = Settings.get('maxDistance');
 
             this.newTrip = {
-                boat: null,
-                description: "",
                 distance: Settings.get('distance')
             };
 
