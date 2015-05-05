@@ -98,7 +98,7 @@ function sass() {
 function tsLint() {
   return gulp.src(globs.app)
     .pipe($.tslint())
-    .pipe($.tslint.report('prose', {emitError: true}));
+    .pipe($.tslint.report('prose'));
 }
 
 function tsCompile() {
@@ -199,7 +199,7 @@ function watch() {
 
 gulp.task('build', gulp.series(
     clean,
-    gulp.parallel(sass, copyAssets, copyManifest, tsCompile, templates, copyVendorCss, copyVendorJs, copyVendorFonts),
+    gulp.parallel(sass, copyAssets, copyManifest, tsLint, tsCompile, templates, copyVendorCss, copyVendorJs, copyVendorFonts),
     index
   ));
 

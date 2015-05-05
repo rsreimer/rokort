@@ -1,38 +1,36 @@
-angular.module('rokort').service('Trips', Trips);
+angular.module("rokort").service("Trips", ($http, Settings, $q) => new Trips($http, Settings, $q));
 
-function Trips($http, Settings, $q) {
-    var service = {};
+class Trips {
+    constructor (private $http, private Settings, private $q) {}
 
-    service.getAll = () => {
-        return $http.get('http://rsreimer.com/andet/rokort/api/profile/' + Settings.get('rower').id)
+    getAll = () => {
+        return this.$http.get("http://rsreimer.com/andet/rokort/api/profile/" + this.Settings.get("rower").id)
             .then(response => response.data);
     };
 
-    service.deleteTrip = id => {
-        var deferred = $q.defer();
+    deleteTrip = id => {
+        var deferred = this.$q.defer();
 
-        $http
-            .delete('http://rsreimer.com/andet/rokort/api/trip/' + id)
+        this.$http
+            .delete("http://rsreimer.com/andet/rokort/api/trip/" + id)
             .then(() => {
                 this.getAll()
-                    .then(trips => deferred.resolve(trips))
+                    .then(trips => deferred.resolve(trips));
             });
 
         return deferred.promise;
     };
 
-    service.addTrip = trip => {
-        var deferred = $q.defer();
+    addTrip = trip => {
+        var deferred = this.$q.defer();
 
-        $http
-            .post('http://rsreimer.com/andet/rokort/api/trip', trip)
+        this.$http
+            .post("http://rsreimer.com/andet/rokort/api/trip", trip)
             .then(() => {
                 this.getAll()
-                    .then(trips => deferred.resolve(trips))
+                    .then(trips => deferred.resolve(trips));
             });
 
         return deferred.promise;
     };
-
-    return service;
 }

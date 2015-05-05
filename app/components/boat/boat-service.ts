@@ -1,22 +1,22 @@
-angular.module('rokort')
-    .service('Boat', (Settings) => new Description(Settings));
+angular.module("rokort")
+    .service("Boat", (Settings) => new Boat(Settings));
 
-class Description {
+class Boat {
     constructor(private Settings) { }
 
     getAll() {
-        return [].concat(this.Settings.get('boats'));
+        return [].concat(this.Settings.get("boats"));
     }
 
-    add(description) {
-        this.Settings.set('boats',
-            this.getAll().push(description)
+    add(boat) {
+        this.Settings.set("boats",
+            this.getAll().push(boat)
         );
     }
 
-    remove(description) {
-        this.Settings.set('boats',
-            this.getAll().filter(d => d !== description)
+    remove(boat) {
+        this.Settings.set("boats",
+            this.getAll().filter(d => d !== boat)
         );
     }
 }

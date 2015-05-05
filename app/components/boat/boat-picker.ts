@@ -1,11 +1,11 @@
-angular.module('rokort')
-    .directive('boatPicker', function() {
+angular.module("rokort")
+    .directive("boatPicker", function() {
         return {
-            restrict: 'E',
-            scope: {selected: '='},
+            restrict: "E",
+            scope: {selected: "="},
             bindToController: true,
-            templateUrl: 'boat/boat-picker.html',
-            controllerAs: 'ctrl',
+            templateUrl: "boat/boat-picker.html",
+            controllerAs: "ctrl",
             controller: BoatPickerController
         };
     });

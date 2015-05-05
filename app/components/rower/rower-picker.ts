@@ -1,10 +1,10 @@
-angular.module('rokort')
-    .directive('rowerPicker', function() {
+angular.module("rokort")
+    .directive("rowerPicker", function() {
         return {
-            restrict: 'E',
-            scope: {selected: '='},
-            templateUrl: 'rower/rower-picker.html',
-            controllerAs: 'ctrl',
+            restrict: "E",
+            scope: {selected: "="},
+            templateUrl: "rower/rower-picker.html",
+            controllerAs: "ctrl",
             controller: RowerPickerController
         };
     });
@@ -26,7 +26,7 @@ class RowerPickerController {
     }
 
     select(rower) {
-        if (!rower) return;
+        if (!rower) { return; }
 
         this.Rower.set(rower);
         this.$scope.selected = rower;

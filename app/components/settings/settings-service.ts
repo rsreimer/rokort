@@ -1,4 +1,4 @@
-angular.module('rokort').service('Settings', () => new Settings());
+angular.module("rokort").service("Settings", () => new Settings());
 
 class Settings {
 

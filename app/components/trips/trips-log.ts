@@ -1,25 +1,25 @@
-angular.module('rokort').directive('tripsLog', tripsLog);
+angular.module("rokort").directive("tripsLog", tripsLog);
 
 function tripsLog() {
     return {
         templateUrl: "trips/trips-log.html",
-        restrict: 'E',
+        restrict: "E",
         scope: {},
         bindToController: true,
-        controllerAs: 'ctrl',
+        controllerAs: "ctrl",
         controller: function ($scope, Trips, Settings) {
-            $scope.$watch('ctrl.rower', () => {
+            $scope.$watch("ctrl.rower", () => {
                 Trips
                     .getAll()
                     .then(trips => this.trips = trips);
             });
 
-            this.descriptions = Settings.get('descriptions');
-            this.boats = Settings.get('boats');
-            this.maxDistance = Settings.get('maxDistance');
+            this.descriptions = Settings.get("descriptions");
+            this.boats = Settings.get("boats");
+            this.maxDistance = Settings.get("maxDistance");
 
             this.newTrip = {
-                distance: Settings.get('distance')
+                distance: Settings.get("distance")
             };
 
             this.addTrip = function (trip) {
@@ -30,7 +30,7 @@ function tripsLog() {
                     .then(trips => {
                         this.adding = false;
                         this.trips = trips;
-                    })
+                    });
             };
 
             this.deleteTrip = function(id) {
@@ -44,5 +44,5 @@ function tripsLog() {
                 }
             };
         }
-    }
+    };
 }

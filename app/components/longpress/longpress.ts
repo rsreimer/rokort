@@ -1,10 +1,10 @@
-angular.module('rokort').directive('longpress', longpress);
+angular.module("rokort").directive("longpress", longpress);
 
 function longpress() {
     return {
-        restrict: 'A',
+        restrict: "A",
         scope: {
-            longpress: '&'
+            longpress: "&"
         },
         link: function(scope, element) {
             var timer;
@@ -23,11 +23,11 @@ function longpress() {
                 element.removeClass("long-press");
             }
 
-            element.on('touchstart', start);
-            element.on('mousedown', start);
+            element.on("touchstart", start);
+            element.on("mousedown", start);
 
-            document.addEventListener('touchend', cancel);
-            document.addEventListener('mouseup', cancel);
+            document.addEventListener("touchend", cancel);
+            document.addEventListener("mouseup", cancel);
         }
-    }
+    };
 }
