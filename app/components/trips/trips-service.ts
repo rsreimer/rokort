@@ -1,18 +1,36 @@
 angular.module('rokort').service('Trips', Trips);
 
-function Trips($http, Settings) {
-    return {
-        getAll: function () {
-            return $http.get('http://rsreimer.com/andet/rokort/api/profile/' + Settings.get('rower').id)
-                .then(function(response) {
-                    return response.data;
-                })
-        },
-        deleteTrip: function (id) {
-            return $http.delete('http://rsreimer.com/andet/rokort/api/trip/' + id)
-        },
-        addTrip: function (trip) {
-            return $http.post('http://rsreimer.com/andet/rokort/api/trip', trip)
-        }
-    }
+function Trips($http, Settings, $q) {
+    var service = {};
+
+    service.getAll = () => {
+        return $http.get('http://rsreimer.com/andet/rokort/api/profile/' + Settings.get('rower').id)
+            .then(response => response.data);
+    };
+
+    service.deleteTrip = id => {
+        var deferred = $q.defer();
+
+        $http
+            .delete('http://rsreimer.com/andet/rokort/api/trip/' + id)
+            .then(() => {
+                this.getAll()
+                    .then(trips => deferred.resolve(trips))
+            });
+
+        return deferred.promise;
+    };
+
+    service.addTrip = trip => {
+        var deferred = $q.defer();
+
+        $http
+            .post('http://rsreimer.com/andet/rokort/api/trip', trip)
+            .then(() => {
+                this.getAll()
+                    .then(trips => deferred.resolve(trips))
+            });
+
+        return deferred.promise;
+    };
 }

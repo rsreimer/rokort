@@ -9,7 +9,8 @@ function tripsLog(Trips, Settings) {
         controllerAs: 'ctrl',
         controller: function ($scope) {
             $scope.$watch('ctrl.rower', () => {
-                Trips.getAll()
+                Trips
+                    .getAll()
                     .then(trips => this.trips = trips);
             });
 
@@ -26,13 +27,11 @@ function tripsLog(Trips, Settings) {
             this.addTrip = function (trip) {
                 this.adding = true;
 
-                Trips.addTrip(trip)
-                    .then(() => {
-                        Trips.getAll()
-                            .then((trips) => {
-                                this.adding = false;
-                                this.trips = trips;
-                            })
+                Trips
+                    .addTrip(trip)
+                    .then(trips => {
+                        this.adding = false;
+                        this.trips = trips;
                     })
             };
 
@@ -41,14 +40,9 @@ function tripsLog(Trips, Settings) {
                     // Remove from UI instantly
                     this.trips = this.trips.filter(trip => trip.id !== id);
 
-                    Trips.deleteTrip(id)
-                        .then(() => {
-                            // Update UI with actual state of rokort (This will re-add the trip to the UI if the trip wasn't deleted on rokort)
-                            Trips.getAll()
-                                .then((trips) => {
-                                    this.trips = trips;
-                                })
-                        })
+                    Trips
+                        .deleteTrip(id)
+                        .then(trips => this.trips = trips);
                 }
             };
         }
