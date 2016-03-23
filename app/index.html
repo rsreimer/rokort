@@ -1,27 +1,82 @@
-<!DOCTYPE html>
-<html lang="en" ng-app="rokort">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<meta name="robots" content="noindex, nofollow">
-		<link rel="icon" sizes="100x100" href="assets/images/logo.png">
-		<link rel="manifest" href="manifest.json">
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Angular Material style sheet -->
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+</head>
+<body ng-app="rokort" ng-controller="trips as ctrl" ng- ng-cloak>
 
-		<title>Rokort</title>
+<md-content>
+    <md-tabs md-stretch-tabs="always" md-dynamic-height md-border-bottom>
+        <md-tab label="Add trip">
+            <md-content class="md-padding">
+                <div layout="column" layout-wrap layout-gt-sm="row">
+                    <div flex-xs flex="50">
+                        <md-radio-group ng-model="newTrip.description">
+                            <md-radio-button ng-repeat="description in ctrl.descriptions track by $index"
+                                             value="{{description}}">{{description}}
+                            </md-radio-button>
+                        </md-radio-group>
+                    </div>
+                    <div flex-xs flex="50">
+                        <md-radio-group ng-model="newTrip.boat">
+                            <md-radio-button ng-repeat="boat in ctrl.boats track by $index" value="{{boat.id}}">
+                                {{boat.name}}
+                            </md-radio-button>
+                        </md-radio-group>
+                    </div>
+                </div>
+                <md-slider-container>
+                    <span>Distance</span>
+                    <md-slider flex min="1" max="30" ng-model="newTrip.distance" aria-label="distance"
+                               id="distance-slider">
+                    </md-slider>
+                    <md-input-container>
+                        <input flex type="number" ng-model="newTrip.distance" aria-label="distance"
+                               aria-controls="distance-slider">
+                    </md-input-container>
+                </md-slider-container>
 
-		<style>[ng-cloak] {display: none;}</style>
-		<!-- inject:css -->
-		<!-- endinject -->
-	</head>
-	<body>
-		<div class="heading">Rokort</div>
+                <md-button ng-disabled="ctrl.adding" ng-click="ctrl.addTrip()" class="md-raised md-primary">Add trip
+                </md-button>
+            </md-content>
+        </md-tab>
+        <md-tab label="History">
+            <md-content class="md-padding">
+                <md-list flex>
+                    <md-list-item class="md-3-line" ng-repeat="trip in ctrl.trips track by $index">
+                        <div class="md-list-item-text" layout="column">
+                            <h3>{{trip.date}}</h3>
+                            <h4>{{trip.distance}}</h4>
+                            <p>{{trip.total}}</p>
+                        </div>
+                        <md-button aria-label="Google.com" class="md-icon-button launch">
+                            <md-icon md-svg-icon="img/icons/launch.svg"></md-icon>
+                        </md-button>
+                    </md-list-item>
+                </md-list>
+            </md-content>
+        </md-tab>
+    </md-tabs>
+</md-content>
 
-		<div class="container-fluid">
-			<trips-log></trips-log>
-		</div>
 
-		<!-- inject:js -->
-		<!-- endinject -->
-	</body>
+<!-- Angular Material requires Angular.js Libraries -->
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+
+<!-- Angular Material Library -->
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+
+<!-- Your application bootstrap  -->
+
+<script src="app.js"></script>
+
+<script src="components/settings/settings-service.js"></script>
+<script src="components/trips/trips-service.js"></script>
+<script src="components/trips/trips-controller.js"></script>
+
+</body>
 </html>
