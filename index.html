@@ -1,6 +1,14 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" manifest="cache.manifest.php">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" sizes="100x100" href="assets/images/logo.png">
+    <link rel="manifest" href="manifest.json">
+
+    <title>Rokort</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
@@ -44,7 +52,7 @@
                 <div flex="15" class="md-title"></div>
             </md-list-item>
             <md-list-item layout="row" ng-repeat="trip in ctrl.trips">
-                <div flex="55">{{trip.date}}</div>
+                <div class="date" flex="55">{{trip.date}}</div>
                 <div flex="15">{{trip.distance}}</div>
                 <div flex="15">{{trip.total}}</div>
                 <div flex="15">

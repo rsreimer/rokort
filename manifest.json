@@ -2,7 +2,7 @@
   "name": "Rokort",
   "icons": [
     {
-      "src": "assets/images/logo.png",
+      "src": "logo.png",
       "sizes": "100x100",
       "type": "image/png",
       "density": "2.0"
