@@ -1,7 +1,8 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Angular Material style sheet -->
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
     <link rel="stylesheet" href="app.css">
 </head>
@@ -37,14 +38,22 @@
     <md-tab label="History">
         <md-list>
             <md-list-item layout="row">
-                <div flex="60" class="md-title">Date</div>
-                <div flex="20" class="md-title">km</div>
-                <div flex="20" class="md-title">Total</div>
+                <div flex="55" class="md-title">Date</div>
+                <div flex="15" class="md-title">km</div>
+                <div flex="15" class="md-title">Total</div>
+                <div flex="15" class="md-title"></div>
             </md-list-item>
-            <md-list-item layout="row" ng-repeat="trip in ctrl.trips" ng-click="">
-                <div flex="60">{{trip.date}}</div>
-                <div flex="20">{{trip.distance}}</div>
-                <div flex="20">{{trip.total}}</div>
+            <md-list-item layout="row" ng-repeat="trip in ctrl.trips">
+                <div flex="55">{{trip.date}}</div>
+                <div flex="15">{{trip.distance}}</div>
+                <div flex="15">{{trip.total}}</div>
+                <div flex="15">
+                    <md-button ng-click="ctrl.deleteTrip(trip.id)"
+                               aria-label="Delete trip"
+                               class="md-icon-button launch">
+                        <md-icon md-font-set="fa"><i class="material-icons">delete</i></md-icon>
+                    </md-button>
+                </div>
             </md-list-item>
         </md-list>
     </md-tab>

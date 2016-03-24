@@ -10,6 +10,7 @@ angular.module("rokort")
         ctrl.maxDistance = Settings.maxDistance;
 
         ctrl.newTrip = {
+            rower: Settings.rower,
             distance: Settings.distance,
             description: ctrl.descriptions[0],
             boat: ctrl.boats[0].id
@@ -20,11 +21,11 @@ angular.module("rokort")
                 ctrl.trips = trips;
             });
 
-        ctrl.addTrip = function (trip) {
+        ctrl.addTrip = function () {
             ctrl.adding = true;
 
             Trips
-                .addTrip(trip)
+                .addTrip(ctrl.newTrip)
                 .then(function (trips) {
                     ctrl.adding = false;
                     ctrl.trips = trips;
