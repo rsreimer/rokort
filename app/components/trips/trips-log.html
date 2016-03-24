@@ -1,9 +1,0 @@
-<h1>Trips</h1>
-<table class="log table table-striped" ng-show="ctrl.trips">
-    <thead>
-    <tr><th>Started</th><th>Distance</th><th>Total</th></tr>
-    </thead>
-    <tbody>
-    <tr class="slide" ng-repeat="trip in ctrl.trips track by trip.date" longpress="deleteTrip(trip.id)"><td>{{trip.date}}</td><td>{{trip.distance}}</td><td>{{trip.total}}</td></tr>
-    </tbody>
-</table>

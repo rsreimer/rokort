@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" manifest="cache.manifest.php">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" sizes="100x100" href="assets/images/logo.png">
+    <link rel="manifest" href="manifest.json">
+
+    <title>Rokort</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body ng-app="rokort" ng-controller="trips as ctrl" ng- ng-cloak>
+
+<md-tabs md-stretch-tabs="always" md-swipe-content md-border-bottom>
+    <md-tab label="Add trip">
+        <md-content class="md-padding">
+            <div layout="row">
+                <div flex="50">
+                    <md-radio-group ng-model="ctrl.newTrip.description">
+                        <md-radio-button ng-repeat="description in ctrl.descriptions track by $index" value="{{description}}">
+                            {{description}}
+                        </md-radio-button>
+                    </md-radio-group>
+                </div>
+                <div flex="50">
+                    <md-radio-group ng-model="ctrl.newTrip.boat">
+                        <md-radio-button ng-repeat="boat in ctrl.boats track by $index" value="{{boat.id}}">
+                            {{boat.name}}
+                        </md-radio-button>
+                    </md-radio-group>
+                </div>
+            </div>
+
+            <div class="md-display-1" style="text-align: center">{{ ctrl.newTrip.distance }} km</div>
+            <md-slider flex min="1" max="30" ng-model="ctrl.newTrip.distance" aria-label="distance"></md-slider>
+
+            <md-button ng-disabled="ctrl.adding" ng-click="ctrl.addTrip()" class="md-raised md-primary">Add trip
+            </md-button>
+        </md-content>
+    </md-tab>
+    <md-tab label="History">
+        <md-list>
+            <md-list-item layout="row">
+                <div flex="55" class="md-title">Date</div>
+                <div flex="15" class="md-title">km</div>
+                <div flex="15" class="md-title">Total</div>
+                <div flex="15" class="md-title"></div>
+            </md-list-item>
+            <md-list-item layout="row" ng-repeat="trip in ctrl.trips">
+                <div class="date" flex="55">{{trip.date}}</div>
+                <div flex="15">{{trip.distance}}</div>
+                <div flex="15">{{trip.total}}</div>
+                <div flex="15">
+                    <md-button ng-click="ctrl.deleteTrip(trip.id)"
+                               aria-label="Delete trip"
+                               class="md-icon-button launch">
+                        <md-icon md-font-set="fa"><i class="material-icons">delete</i></md-icon>
+                    </md-button>
+                </div>
+            </md-list-item>
+        </md-list>
+    </md-tab>
+</md-tabs>
+
+
+<!-- Angular Material requires Angular.js Libraries -->
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+
+<!-- Angular Material Library -->
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+
+<!-- Your application bootstrap  -->
+
+<script src="app.js"></script>
+
+<script src="components/settings/settings-service.js"></script>
+<script src="components/trips/trips-service.js"></script>
+<script src="components/trips/trips-controller.js"></script>
+
+</body>
+</html>

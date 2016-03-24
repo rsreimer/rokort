@@ -1,0 +1,14 @@
+{
+  "name": "Rokort",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "100x100",
+      "type": "image/png",
+      "density": "2.0"
+    }
+  ],
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "portrait"
+}
