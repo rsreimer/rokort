@@ -72,5 +72,5 @@ class RokortApi {
 
 	private $session_cookie = "";
 	private $siteid = "";
-	private $host = "http://www.rokort.dk";
+	private $host = "https://www.rokort.dk";
 }

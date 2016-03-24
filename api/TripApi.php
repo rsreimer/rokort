@@ -8,7 +8,6 @@ class TripApi {
 		$trips = array();
 
 		$response = $this->rokortApi->get("/workshop/member.php?id=$rower&index=all&season=$season");
-
 		libxml_use_internal_errors(true);
 		$doc = new DOMDocument();
 		$doc->loadHTML($response);

@@ -6,7 +6,17 @@ $app = new \Slim\Slim();
 
 
 // Rokort API
-require 'authinfo.php'; // Set $siteid and $guid in authinfo.php
+
+require 'authinfo.php';
+/* Create authinfo.php with the following three lines:
+
+<?php
+$siteid = "YOUR_SITE_ID";
+$guid = "YOUR_GUID";
+
+ */
+
+
 $rokortApi = new RokortApi($siteid, $guid);
 $tripApi = new TripApi($rokortApi);
 $rowerApi = new RowerApi($rokortApi);
