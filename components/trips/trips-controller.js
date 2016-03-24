@@ -1,5 +1,5 @@
 angular.module("rokort")
-    .controller("trips", function tripsLog(Trips, Settings) {
+    .controller("trips", function tripsLog(Trips, Settings, $mdDialog) {
         var ctrl = this;
 
         ctrl.adding = false;
@@ -10,7 +10,9 @@ angular.module("rokort")
         ctrl.maxDistance = Settings.maxDistance;
 
         ctrl.newTrip = {
-            distance: Settings.distance
+            distance: Settings.distance,
+            description: ctrl.descriptions[0],
+            boat: ctrl.boats[0].id
         };
 
         Trips.getAll()
@@ -30,17 +32,23 @@ angular.module("rokort")
         };
 
         ctrl.deleteTrip = function (id) {
-            if (!confirm("Delete this trip?")) return;
+            var confirm = $mdDialog.confirm()
+                .title('Delete this trip?')
+                .ok('Yes')
+                .cancel('Cancel');
 
-            // Remove from UI instantly
-            ctrl.trips = ctrl.trips.filter(function (trip) {
-                return trip.id !== id;
-            });
+            $mdDialog.show(confirm)
+                .then(function() {
+                    // Remove from UI instantly
+                    ctrl.trips = ctrl.trips.filter(function (trip) {
+                        return trip.id !== id;
+                    });
 
-            Trips
-                .deleteTrip(id)
-                .then(function (trips) {
-                    ctrl.trips = trips;
+                    Trips
+                        .deleteTrip(id)
+                        .then(function (trips) {
+                            ctrl.trips = trips;
+                        });
                 });
         };
     });

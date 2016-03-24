@@ -3,59 +3,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Angular Material style sheet -->
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+    <link rel="stylesheet" href="app.css">
 </head>
 <body ng-app="rokort" ng-controller="trips as ctrl" ng- ng-cloak>
 
-<md-content>
-    <md-tabs md-stretch-tabs="always" md-dynamic-height md-border-bottom>
-        <md-tab label="Add trip">
-            <md-content class="md-padding">
-                <div layout="column" layout-wrap layout-gt-sm="row">
-                    <div flex-xs flex="50">
-                        <md-radio-group ng-model="newTrip.description">
-                            <md-radio-button ng-repeat="description in ctrl.descriptions track by $index"
-                                             value="{{description}}">{{description}}
-                            </md-radio-button>
-                        </md-radio-group>
-                    </div>
-                    <div flex-xs flex="50">
-                        <md-radio-group ng-model="newTrip.boat">
-                            <md-radio-button ng-repeat="boat in ctrl.boats track by $index" value="{{boat.id}}">
-                                {{boat.name}}
-                            </md-radio-button>
-                        </md-radio-group>
-                    </div>
+<md-tabs md-stretch-tabs="always" md-swipe-content md-border-bottom>
+    <md-tab label="Add trip">
+        <md-content class="md-padding">
+            <div layout="row">
+                <div flex="50">
+                    <md-radio-group ng-model="ctrl.newTrip.description">
+                        <md-radio-button ng-repeat="description in ctrl.descriptions track by $index" value="{{description}}">
+                            {{description}}
+                        </md-radio-button>
+                    </md-radio-group>
                 </div>
-                <md-slider-container>
-                    <span>Distance</span>
-                    <md-slider flex min="1" max="30" ng-model="newTrip.distance" aria-label="distance"
-                               id="distance-slider">
-                    </md-slider>
-                    <md-input-container>
-                        <input flex type="number" ng-model="newTrip.distance" aria-label="distance"
-                               aria-controls="distance-slider">
-                    </md-input-container>
-                </md-slider-container>
+                <div flex="50">
+                    <md-radio-group ng-model="ctrl.newTrip.boat">
+                        <md-radio-button ng-repeat="boat in ctrl.boats track by $index" value="{{boat.id}}">
+                            {{boat.name}}
+                        </md-radio-button>
+                    </md-radio-group>
+                </div>
+            </div>
 
-                <md-button ng-disabled="ctrl.adding" ng-click="ctrl.addTrip()" class="md-raised md-primary">Add trip
-                </md-button>
-            </md-content>
-        </md-tab>
-        <md-tab label="History">
-            <md-content class="md-padding">
-                <md-list flex>
-                    <md-list-item class="md-3-line" ng-repeat="trip in ctrl.trips track by $index">
-                        <div class="md-list-item-text" layout="column">
-                            <h3>{{trip.date}}</h3>
-                            <h4>{{trip.distance}}</h4>
-                            <p>{{trip.total}}</p>
-                        </div>
-                    </md-list-item>
-                </md-list>
-            </md-content>
-        </md-tab>
-    </md-tabs>
-</md-content>
+            <div class="md-display-1" style="text-align: center">{{ ctrl.newTrip.distance }} km</div>
+            <md-slider flex min="1" max="30" ng-model="ctrl.newTrip.distance" aria-label="distance"></md-slider>
+
+            <md-button ng-disabled="ctrl.adding" ng-click="ctrl.addTrip()" class="md-raised md-primary">Add trip
+            </md-button>
+        </md-content>
+    </md-tab>
+    <md-tab label="History">
+        <md-list>
+            <md-list-item layout="row">
+                <div flex="60" class="md-title">Date</div>
+                <div flex="20" class="md-title">km</div>
+                <div flex="20" class="md-title">Total</div>
+            </md-list-item>
+            <md-list-item layout="row" ng-repeat="trip in ctrl.trips" ng-click="">
+                <div flex="60">{{trip.date}}</div>
+                <div flex="20">{{trip.distance}}</div>
+                <div flex="20">{{trip.total}}</div>
+            </md-list-item>
+        </md-list>
+    </md-tab>
+</md-tabs>
 
 
 <!-- Angular Material requires Angular.js Libraries -->

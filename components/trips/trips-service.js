@@ -27,8 +27,8 @@ angular.module("rokort").service("Trips", function ($http, $q, Settings) {
         return deferred.promise;
     };
 
-    this.addtrip = function (trip) {
-        var deferred = this.$q.defer();
+    this.addTrip = function (trip) {
+        var deferred = $q.defer();
 
         $http
             .post("./api/trip", trip)
