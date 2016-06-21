@@ -4,7 +4,7 @@
     header("Expires: Wed, 11 Jan 1984 05:00:00 GMT");
     header('Content-type: text/cache-manifest');
 ?>CACHE MANIFEST
-# version 3.1.3
+# version 3.2.5
 
 //fonts.googleapis.com/icon?family=Material+Icons
 //ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css
@@ -22,7 +22,7 @@ app.js
 
 app.css
 
-assets/images/logo.png
+logo.png
 
 NETWORK:
 *
